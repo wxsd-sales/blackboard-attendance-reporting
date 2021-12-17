@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateBlackboardCourseMeetingsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('blackboard_course_meetings', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->string('course_id');
+            $table->string('webex_meeting_id')->nullable();
+            $table->timestamp('synced_at');
+            $table->timestamps();
+
+            $table->foreign('course_id')->references('id')->on('blackboard_courses')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreign('webex_meeting_id')->references('id')->on('webex_meetings')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('blackboard_course_meetings');
+    }
+}
